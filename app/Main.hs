@@ -6,6 +6,7 @@ import Data.Char
 
 matchPattern :: String -> String -> Bool
 matchPattern "\\d" input = any isDigit input
+matchPattern "\\w" input = any (`elem` ['a'..'z']++['A'..'Z']++['0'..'9']) input
 matchPattern pattern input = do
   if length pattern == 1
     then head pattern `elem` input
