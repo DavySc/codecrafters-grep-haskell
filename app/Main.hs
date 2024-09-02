@@ -2,8 +2,10 @@ module Main where
 
 import System.Environment
 import System.Exit
+import Data.Char
 
 matchPattern :: String -> String -> Bool
+matchPattern "\\d" input = any isDigit input
 matchPattern pattern input = do
   if length pattern == 1
     then head pattern `elem` input
