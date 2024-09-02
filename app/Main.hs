@@ -4,7 +4,11 @@ import System.Environment
 import System.Exit
 import Data.Char
 
+matchPositiveGroup "]" _ = False
+matchPositiveGroup (x:xs) input = x `elem` input || matchPositiveGroup xs input
+
 matchPattern :: String -> String -> Bool
+matchPattern ('[':xs) input = matchPositiveGroup xs input
 matchPattern "\\d" input = any isDigit input
 matchPattern "\\w" input = any (`elem` ['a'..'z']++['A'..'Z']++['0'..'9']) input
 matchPattern pattern input = do
