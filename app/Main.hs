@@ -1,16 +1,17 @@
 module Main where
 
+import Data.Char
 import System.Environment
 import System.Exit
-import Data.Char
 
 matchPositiveGroup "]" _ = False
-matchPositiveGroup (x:xs) input = x `elem` input || matchPositiveGroup xs input
+matchPositiveGroup (x : xs) input = x `elem` input || matchPositiveGroup xs input
 
 matchPattern :: String -> String -> Bool
-matchPattern ('[':xs) input = matchPositiveGroup xs input
+matchPattern ( '[' : '^' : xs) input = not (matchPositiveGroup xs input)
+matchPattern ('[' : xs) input = matchPositiveGroup xs input
 matchPattern "\\d" input = any isDigit input
-matchPattern "\\w" input = any (`elem` ['a'..'z']++['A'..'Z']++['0'..'9']) input
+matchPattern "\\w" input = any (`elem` ['a' .. 'z'] ++ ['A' .. 'Z'] ++ ['0' .. '9']) input
 matchPattern pattern input = do
   if length pattern == 1
     then head pattern `elem` input
@@ -29,6 +30,7 @@ main = do
     then do
       putStrLn "Expected first argument to be '-E'"
       exitFailure
-    else do if matchPattern pattern input_line
-              then exitSuccess
-              else exitFailure
+    else do
+      if matchPattern pattern input_line
+        then exitSuccess
+        else exitFailure
